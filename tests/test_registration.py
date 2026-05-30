@@ -1,9 +1,9 @@
 import random
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+
 
 def test_registration_success():
     driver = webdriver.Chrome()
@@ -40,3 +40,4 @@ def test_registration_incorrect_password_error():
     WebDriverWait(driver, 7).until(expected_conditions.visibility_of_element_located((By.XPATH, "//p[text()='Некорректный пароль']")))
     
     driver.quit()
+    

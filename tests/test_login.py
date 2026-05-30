@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+
 def test_login_through_main_page_button_success(create_valid_user):
     driver = webdriver.Chrome()
     driver.get("https://stellarburgers.education-services.ru/")

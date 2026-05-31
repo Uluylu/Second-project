@@ -1,27 +1,21 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+import constants
+import locators
 
-def test_personal_account_logout_success(create_valid_user):
-    driver = webdriver.Chrome()
-    driver.get("https://stellarburgers.education-services.ru/")
 
-    user_login = create_valid_user["email"]
-    user_password = create_valid_user["password"]
+def test_personal_account_logout_success(driver, create_valid_user):
+    driver.get(constants.BASE_URL)
 
-    WebDriverWait(driver, 5).until(expected_conditions.element_to_be_clickable((By.XPATH, "//p[text()='Личный Кабинет']"))).click()
-    WebDriverWait(driver, 5).until(expected_conditions.element_to_be_clickable((By.XPATH, "//div[label[text()='Email']]/input"))).send_keys(user_login)
-    driver.find_element(By.XPATH, "//div[label[text()='Пароль']]/input").send_keys(user_password)
-    driver.find_element(By.XPATH, "//button[text()='Войти']").click()
+    WebDriverWait(driver, 3).until(expected_conditions.element_to_be_clickable(locators.HEADER_ACCOUNT_BUTTON)).click()
+    WebDriverWait(driver, 3).until(expected_conditions.element_to_be_clickable(locators.AUTH_EMAIL_INPUT)).send_keys(create_valid_user["email"])
+    driver.find_element(*locators.AUTH_PASSWORD_INPUT).send_keys(create_valid_user["password"])
+    driver.find_element(*locators.LOGIN_SUBMIT_BUTTON).click()
 
-    WebDriverWait(driver, 7).until(expected_conditions.visibility_of_element_located((By.XPATH, "//button[text()='Оформить заказ']")))
-    driver.find_element(By.XPATH, "//p[text()='Личный Кабинет']").click()
-    WebDriverWait(driver, 5).until(expected_conditions.element_to_be_clickable((By.XPATH, "//button[text()='Выход']"))).click()
+    WebDriverWait(driver, 4).until(expected_conditions.element_to_be_clickable(locators.HEADER_ACCOUNT_BUTTON)).click()
+    WebDriverWait(driver, 3).until(expected_conditions.element_to_be_clickable(locators.PROFILE_LOGOUT_BUTTON)).click()
 
-    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located((By.XPATH, "//button[text()='Войти']")))
+    WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(locators.LOGIN_SUBMIT_BUTTON))
 
-    assert driver.current_url == "https://stellarburgers.education-services.ru/login"
-    
-    driver.quit()
+    assert driver.current_url == constants.AUTHORIZATION_URL
